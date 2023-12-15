@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="549.0" prefWidth="648.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OrderFormController">
+   <children>
+      <Text layoutX="288.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Table" />
+      <JFXTreeTableView fx:id="orderTableId" layoutX="23.0" layoutY="55.0" prefHeight="202.0" prefWidth="617.0">
+         <columns>
+            <TreeTableColumn fx:id="colOrderId" prefWidth="75.0" text="Order ID" />
+            <TreeTableColumn fx:id="colDate" prefWidth="90.0" text="Date" />
+            <TreeTableColumn fx:id="colCusId" prefWidth="85.0" text="Customer ID" />
+            <TreeTableColumn fx:id="colNameId" prefWidth="177.0" text="Name" />
+            <TreeTableColumn fx:id="colAmountId" minWidth="0.0" prefWidth="92.0" text="Amount" />
+            <TreeTableColumn fx:id="colOptionId" prefWidth="97.0" text="Option" />
+         </columns>
+      </JFXTreeTableView>
+      <JFXTreeTableView fx:id="orderDetailsTableId" layoutX="24.0" layoutY="296.0" prefHeight="239.0" prefWidth="617.0">
+         <columns>
+            <TreeTableColumn fx:id="colItemId" prefWidth="75.0" text="Item ID" />
+            <TreeTableColumn fx:id="colDesId" prefWidth="158.0" text="Description" />
+            <TreeTableColumn fx:id="colUnitPriceId" prefWidth="85.0" text="Unit Price" />
+            <TreeTableColumn fx:id="colQtyId" prefWidth="92.0" text="Qty" />
+            <TreeTableColumn fx:id="colAmountItemId" prefWidth="102.0" text="Amount" />
+            <TreeTableColumn fx:id="colOptionItemId" prefWidth="104.0" text="Option" />
+         </columns>
+      </JFXTreeTableView>
+      <Text layoutX="284.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Details" />
+   </children>
+</AnchorPane>
