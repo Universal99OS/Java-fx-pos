@@ -88,5 +88,21 @@ public class OrderModelImpl implements OrderModel {
 
     }
 
+    @Override
+    public boolean isDelte(String id) {
+        String sql="DELETE FROM orders WHERE id=?";
+        try {
+            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1,id);
+            return pstm.executeUpdate()>0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
 }

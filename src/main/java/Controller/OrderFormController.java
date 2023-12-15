@@ -1,5 +1,6 @@
 package Controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
@@ -74,15 +75,23 @@ public class OrderFormController {
         ObservableList<OrderDetailsViewTm> detailsViewTms=FXCollections.observableArrayList();
 
         for (OrderDetailsDto orderD: detailsDtos) {
-            detailsViewTms.add(new OrderDetailsViewTm(
+            JFXButton btn=new JFXButton("Delete");
+            OrderDetailsViewTm detailsViewTm=new OrderDetailsViewTm(
                     orderD.getItemCode(),
                     itemModel.getItemDes(orderD.getItemCode()),
                     orderD.getPrice(),
                     orderD.getQty(),
                     (orderD.getPrice()*orderD.getQty()),
-                    null
+                    btn
 
-            ));
+            );
+
+            btn.setOnAction(event ->{
+                orderDetailsModel.isDelete(orderD.getOrderId(),orderD.getItemCode());
+                loadOrderDetailsViewTable(orderId);
+            });
+            detailsViewTms.add(detailsViewTm);
+
         }
 
         TreeItem<OrderDetailsViewTm> treeItem=new RecursiveTreeItem<>(detailsViewTms,RecursiveTreeObject::getChildren);
@@ -90,8 +99,8 @@ public class OrderFormController {
         orderDetailsTableId.setShowRoot(false);
     }
 
-    private void loadOrderViewTable() {
-        ObservableList<OrderViewTm> tmList= orderViewModel.allOrderViews();
+    public void loadOrderViewTable() {
+        ObservableList<OrderViewTm> tmList= orderViewModel.allOrderViews(this);
 
         TreeItem<OrderViewTm> treeItem=new RecursiveTreeItem<>(tmList, RecursiveTreeObject::getChildren);
         orderTableId.setRoot(treeItem);

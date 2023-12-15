@@ -2,6 +2,7 @@ package model.impl;
 
 import db.DbConnector;
 import dto.OrderDetailsDto;
+import javafx.scene.control.Alert;
 import model.OrderDetailsModel;
 
 import java.sql.PreparedStatement;
@@ -33,8 +34,8 @@ public class OrderDetailsModelImpl implements OrderDetailsModel {
 
     @Override
     public double orderAmount(String orderId) {
-        double amount=0.0d;
-        String sql="Select * FROM orderdetails WHERE orderid=?";
+        double amount=0;
+        String sql="Select * FROM orderdetail WHERE orderid=?";
         try {
             PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
             pstm.setString(1,orderId);
@@ -75,5 +76,26 @@ public class OrderDetailsModelImpl implements OrderDetailsModel {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void isDelete(String orderId, String itemCode) {
+        String sql="DELETE FROM orderdetail WHERE orderid=? AND itemcode=?";
+        try {
+            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1,orderId);
+            pstm.setString(2,itemCode);
+            int i = pstm.executeUpdate();
+            if(i>0){
+                new Alert(Alert.AlertType.INFORMATION,"Succefully Deleted").show();
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Something went wrong").show();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }

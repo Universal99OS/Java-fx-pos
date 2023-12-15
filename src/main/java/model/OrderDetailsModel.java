@@ -12,4 +12,6 @@ public interface OrderDetailsModel {
     double orderAmount(String orderId);
 
     ArrayList<OrderDetailsDto> getAll(String orderId);
+
+    void isDelete(String orderId, String itemCode);
 }

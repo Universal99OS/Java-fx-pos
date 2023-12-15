@@ -12,4 +12,6 @@ public interface OrderModel {
 
     ArrayList<OrderdDto> allOrders();
 
+    boolean isDelte(String id);
+
 }
