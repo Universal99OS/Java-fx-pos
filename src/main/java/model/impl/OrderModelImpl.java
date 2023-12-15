@@ -2,7 +2,6 @@ package model.impl;
 
 import db.DbConnector;
 import dto.OrderdDto;
-import model.CustomerModel;
 import model.OrderDetailsModel;
 import model.OrderModel;
 
@@ -10,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OrderModelImpl implements OrderModel {
 
@@ -61,4 +61,32 @@ public class OrderModelImpl implements OrderModel {
         }
         return null;
     }
+
+    @Override
+    public ArrayList<OrderdDto> allOrders() {
+        ArrayList<OrderdDto> orderList=new ArrayList<>();
+
+        String sql="SELECT * FROM orders";
+        try {
+            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
+            ResultSet resultSet = pstm.executeQuery();
+            while (resultSet.next()){
+                orderList.add(new OrderdDto(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        null
+                ));
+            }
+            return orderList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
 }

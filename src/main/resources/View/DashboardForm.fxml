@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e88a3a;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DashboardFormController">
+<AnchorPane fx:id="pane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffba08;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DashboardFormController">
    <children>
       <JFXButton buttonType="RAISED" layoutX="64.0" layoutY="70.0" onAction="#customerOnActionButton" prefHeight="48.0" prefWidth="86.0" style="-fx-background-color: #e7da98;" text="Customer" />
       <JFXButton buttonType="RAISED" layoutX="64.0" layoutY="152.0" onAction="#itemButtonOnAction" prefHeight="48.0" prefWidth="86.0" style="-fx-background-color: #e39191;" text="Item" />
@@ -18,5 +18,6 @@
          <font>
             <Font name="System Bold" size="13.0" />
          </font></JFXButton>
+      <JFXButton buttonType="RAISED" layoutX="64.0" layoutY="233.0" onAction="#allOrdersButtonOnAction" prefHeight="48.0" prefWidth="86.0" style="-fx-background-color: #219ebc;" text="All Orders" />
    </children>
 </AnchorPane>

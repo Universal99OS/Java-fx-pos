@@ -14,5 +14,7 @@ public interface CustomerModel {
 
     CustomerDto searchCustomer(String id);
 
+    String getCustomerName(String customerId);
+
 
 }

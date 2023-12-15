@@ -5,6 +5,7 @@ import dto.OrderDetailsDto;
 import model.OrderDetailsModel;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +27,27 @@ public class OrderDetailsModelImpl implements OrderDetailsModel {
             }
         }
         return isOrderDetailsSaved;
+
+    }
+
+    @Override
+    public double orderAmount(String orderId) {
+        double amount=0.0d;
+        String sql="Select * FROM orderdetails WHERE orderid=?";
+        try {
+            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1,orderId);
+            ResultSet resultSet = pstm.executeQuery();
+            while(resultSet.next()){
+                amount+=(resultSet.getInt(3)*resultSet.getDouble(4));
+            }
+            return amount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return amount;
 
     }
 }

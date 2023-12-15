@@ -74,4 +74,22 @@ public class CustomerModelImpl implements CustomerModel {
     public CustomerDto searchCustomer(String id) {
         return null;
     }
+
+    @Override
+    public String getCustomerName(String customerId) {
+        String sql="SELECT * FROM customer WHERE id=?";
+
+        try {
+            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1,customerId);
+            ResultSet resultSet = pstm.executeQuery();
+            resultSet.next();
+            return resultSet.getString(2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
