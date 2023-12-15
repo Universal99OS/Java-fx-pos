@@ -12,4 +12,6 @@ public interface ItemModel {
     ItemDto getItem(String code);
 
     List allItems();
+
+    String getItemDes(String code);
 }

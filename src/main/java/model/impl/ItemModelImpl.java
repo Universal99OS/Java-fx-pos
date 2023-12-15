@@ -118,4 +118,10 @@ public class ItemModelImpl implements ItemModel {
 
 
     }
+
+    @Override
+    public String getItemDes(String code) {
+        ItemDto item = getItem(code);
+        return item.getDescription();
+    }
 }

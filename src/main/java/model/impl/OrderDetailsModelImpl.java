@@ -7,6 +7,7 @@ import model.OrderDetailsModel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailsModelImpl implements OrderDetailsModel {
@@ -49,5 +50,30 @@ public class OrderDetailsModelImpl implements OrderDetailsModel {
         }
         return amount;
 
+    }
+
+    @Override
+    public ArrayList<OrderDetailsDto> getAll(String orderId) {
+        ArrayList<OrderDetailsDto> orderDetailsDtos=new ArrayList<>();
+        String sql="SELECT * FROM orderdetail WHERE orderid=?";
+        try {
+            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1,orderId);
+            ResultSet resultSet = pstm.executeQuery();
+            while (resultSet.next()){
+                orderDetailsDtos.add(new OrderDetailsDto(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getDouble(4)
+                ));
+            }
+            return orderDetailsDtos;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
