@@ -12,12 +12,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import model.ItemModel;
-import model.OrderDetailsModel;
-import model.OrderViewModel;
-import model.impl.ItemModelImpl;
-import model.impl.OrderDetailsModelImpl;
-import model.impl.OrderViewModelImpl;
+import dao.ItemModel;
+import dao.OrderDetailsModel;
+import dao.OrderViewModel;
+import dao.ItemModelImpl;
+import dao.OrderDetailsModelImpl;
+import dao.OrderViewModelImpl;
 
 import java.util.ArrayList;
 

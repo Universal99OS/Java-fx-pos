@@ -2,11 +2,8 @@ package Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import db.DbConnector;
 import dto.ItemDto;
 import dto.tablemodel.ItemTableModel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,9 +15,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.Item;
-import model.ItemModel;
-import model.impl.ItemModelImpl;
+import dao.ItemModel;
+import dao.ItemModelImpl;
 
 import java.io.IOException;
 import java.util.List;

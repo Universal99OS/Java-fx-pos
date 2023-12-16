@@ -1,9 +1,8 @@
-package model.impl;
+package dao;
 
 import db.DbConnector;
 import dto.OrderDetailsDto;
 import javafx.scene.control.Alert;
-import model.OrderDetailsModel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

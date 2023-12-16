@@ -19,12 +19,12 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.CustomerModel;
-import model.ItemModel;
-import model.OrderModel;
-import model.impl.CustomerModelImpl;
-import model.impl.ItemModelImpl;
-import model.impl.OrderModelImpl;
+import dao.CustomerModel;
+import dao.ItemModel;
+import dao.OrderModel;
+import dao.CustomerModelImpl;
+import dao.ItemModelImpl;
+import dao.OrderModelImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
