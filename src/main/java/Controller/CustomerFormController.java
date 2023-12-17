@@ -1,9 +1,12 @@
 package Controller;
 
+import bo.BoFactory;
 import bo.custom.CustomerBo;
 import bo.custom.impl.CustomerBoImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import dao.util.BoType;
+import db.DbConnector;
 import dto.CustomerDto;
 import dto.tablemodel.CustomerTableModel;
 import javafx.collections.FXCollections;
@@ -58,7 +61,7 @@ public class CustomerFormController {
     @FXML
     private TableColumn collOption;
 
-    private CustomerBo customerBo=new CustomerBoImpl();
+    CustomerBo customerBo=BoFactory.getInstance().getBo(BoType.CUSTOMER);
 
     public void initialize(){
 
