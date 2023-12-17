@@ -2,6 +2,7 @@ package dao.custom.impl;
 
 import Entity.Customer;
 import dao.custom.CustomerDao;
+import dao.util.CrudUtil;
 import db.DbConnector;
 import dto.CustomerDto;
 
@@ -20,62 +21,39 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
-    public String getCustomerName(String customerId) {
+    public String getCustomerName(String customerId) throws SQLException, ClassNotFoundException {
         String sql="SELECT * FROM customer WHERE id=?";
 
-        try {
-            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
-            pstm.setString(1,customerId);
-            ResultSet resultSet = pstm.executeQuery();
-            resultSet.next();
-            return resultSet.getString(2);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        ResultSet resultSet = CrudUtil.execute(sql,customerId);
+        resultSet.next();
+        return resultSet.getString(2);
+
     }
 
     @Override
     public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
         String sql="INSERT INTO customer VALUES(?,?,?,?)";
-        PreparedStatement pstm= DbConnector.getInstance().getConnection().prepareStatement(sql);
-        pstm.setString(1,entity.getId());
-        pstm.setString(2,entity.getName());
-        pstm.setString(3,entity.getAddress());
-        pstm.setDouble(4,entity.getSalary());
-
-        return pstm.executeUpdate()>0;
+        return CrudUtil.execute(sql,entity.getId(),entity.getName(),entity.getAddress(),entity.getSalary());
     }
 
     @Override
     public boolean update(Customer entity) throws SQLException, ClassNotFoundException {
         String sql="Update customer SET name=?, address=?, salary=? WHERE id=?";
-        PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
-        pstm.setString(1,entity.getName());
-        pstm.setString(2, entity.getAddress());
-        pstm.setDouble(3,entity.getSalary());
-        pstm.setString(4, entity.getId());
 
-        return pstm.executeUpdate()>0;
+        return CrudUtil.execute(sql,entity.getName(),entity.getAddress(),entity.getSalary(),entity.getId());
+
     }
 
     @Override
     public boolean delete(String value) throws SQLException, ClassNotFoundException {
         String sql="DELETE FROM customer WHERE id=?";
-        PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
-        pstm.setString(1,value);
-
-        return pstm.executeUpdate()>0;
+        return CrudUtil.execute(sql,value);
     }
 
     @Override
     public List<Customer> getAll() throws SQLException, ClassNotFoundException {
         String sql="SELECT * FROM customer";
-        PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
-
-        ResultSet rst = pstm.executeQuery();
+        ResultSet rst = CrudUtil.execute(sql);
 
         List<Customer> list= new ArrayList<>();
 

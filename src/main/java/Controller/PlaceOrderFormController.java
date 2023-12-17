@@ -112,7 +112,7 @@ public class PlaceOrderFormController {
 
     private void loadCustomerIds() {
         try {
-            customers= customerDao.allCustomers();
+            customers= customerDto.allCustomers();
             ObservableList<String> list=FXCollections.observableArrayList();
             for (CustomerDto dto:customers) {
                 list.add(dto.getId());

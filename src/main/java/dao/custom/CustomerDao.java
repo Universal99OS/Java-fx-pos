@@ -16,7 +16,7 @@ public interface CustomerDao extends CrudDao<Customer> {
 
     Customer searchCustomer(String id);
 
-    String getCustomerName(String customerId);
+    String getCustomerName(String customerId) throws SQLException, ClassNotFoundException;
 
 
 }
