@@ -1,7 +1,11 @@
-package dao;
+package dao.custom.impl;
 
 import Controller.OrderFormController;
 import com.jfoenix.controls.JFXButton;
+import dao.custom.CustomerDao;
+import dao.custom.OrderDetailsDao;
+import dao.custom.OrderDao;
+import dao.custom.OrderViewDao;
 import dto.OrderdDto;
 import dto.tablemodel.OrderViewTm;
 import javafx.collections.FXCollections;
@@ -10,10 +14,10 @@ import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 
-public class OrderViewModelImpl implements OrderViewModel {
-    OrderModel orderModel=new OrderModelImpl();
-    CustomerModel customerModel=new CustomerModelImpl();
-    OrderDetailsModel orderDetailsModel=new OrderDetailsModelImpl();
+public class OrderViewDaoImpl implements OrderViewDao {
+    OrderDao orderModel=new dao.custom.impl.OrderDaoImpl();
+    CustomerDao customerDao =new dao.custom.impl.CustomerDaoImpl();
+    OrderDetailsDao orderDetailsDao =new dao.custom.impl.OrderDetailsDaoImpl();
     @Override
     public ObservableList<OrderViewTm> allOrderViews(OrderFormController b) {
         ObservableList<OrderViewTm> tmList= FXCollections.observableArrayList();
@@ -25,8 +29,8 @@ public class OrderViewModelImpl implements OrderViewModel {
                     order.getOrderId(),
                     order.getDate(),
                     order.getCustomerId(),
-                    customerModel.getCustomerName(order.getCustomerId()),
-                    orderDetailsModel.orderAmount(order.getOrderId()),
+                    customerDao.getCustomerName(order.getCustomerId()),
+                    orderDetailsDao.orderAmount(order.getOrderId()),
                     button
             ));
 

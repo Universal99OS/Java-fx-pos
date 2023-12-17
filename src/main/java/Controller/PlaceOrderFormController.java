@@ -2,6 +2,9 @@ package Controller;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import dao.custom.CustomerDaoImpl;
+import dao.custom.ItemDaoImpl;
+import dao.custom.OrderDaoImpl;
 import dto.CustomerDto;
 import dto.ItemDto;
 import dto.OrderDetailsDto;
@@ -19,12 +22,12 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import dao.CustomerModel;
-import dao.ItemModel;
-import dao.OrderModel;
-import dao.CustomerModelImpl;
-import dao.ItemModelImpl;
-import dao.OrderModelImpl;
+import dao.custom.CustomerDao;
+import dao.custom.ItemDao;
+import dao.custom.OrderDao;
+import dao.custom.impl.CustomerDaoImpl;
+import dao.custom.impl.ItemDaoImpl;
+import dao.custom.impl.OrderDaoImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -55,10 +58,10 @@ public class PlaceOrderFormController {
     private List<CustomerDto> customers;
     private List<ItemDto> items;
 
-    private CustomerModel customerModel=new CustomerModelImpl();
-    private ItemModel itemModel=new ItemModelImpl();
+    private CustomerDao customerDao =new CustomerDaoImpl();
+    private ItemDao itemDao =new ItemDaoImpl();
 
-    private OrderModel orderModel=new OrderModelImpl();
+    private OrderDao orderModel=new OrderDaoImpl();
     private double tot=0;
 
     private ObservableList<OrderTm> tmList=FXCollections.observableArrayList();
@@ -97,7 +100,7 @@ public class PlaceOrderFormController {
     }
 
     private void loadItemIds() {
-        items=itemModel.allItems();
+        items= itemDao.allItems();
         ObservableList<String> list= FXCollections.observableArrayList();
         for (ItemDto dto:items) {
             list.add(dto.getCode());
@@ -109,7 +112,7 @@ public class PlaceOrderFormController {
 
     private void loadCustomerIds() {
         try {
-            customers=customerModel.allCustomers();
+            customers= customerDao.allCustomers();
             ObservableList<String> list=FXCollections.observableArrayList();
             for (CustomerDto dto:customers) {
                 list.add(dto.getId());
@@ -134,7 +137,7 @@ public class PlaceOrderFormController {
     }
 
     public void addtoCartBtnOnAction(ActionEvent actionEvent) {
-        double amount=itemModel.getItem(orderIdComboBox.getValue().toString()).getUniPrice()*Double.parseDouble(qtyField.getText());
+        double amount= itemDao.getItem(orderIdComboBox.getValue().toString()).getUniPrice()*Double.parseDouble(qtyField.getText());
         JFXButton btn=new JFXButton("Delete");
         OrderTm tm=new OrderTm(
                 orderIdComboBox.getValue().toString(),

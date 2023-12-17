@@ -2,6 +2,7 @@ package Controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import dao.custom.ItemDaoImpl;
 import dto.ItemDto;
 import dto.tablemodel.ItemTableModel;
 import javafx.collections.FXCollections;
@@ -15,8 +16,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import dao.ItemModel;
-import dao.ItemModelImpl;
+import dao.custom.ItemDao;
+import dao.custom.impl.ItemDaoImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ItemFormController {
     public AnchorPane itemPane;
     public JFXTextField searchText;
 
-    private ItemModel itemModel=new ItemModelImpl();
+    private ItemDao itemDao =new ItemDaoImpl();
 
     public void initialize(){
         collItemId.setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -68,7 +69,7 @@ public class ItemFormController {
 
 
         try{
-            List<ItemDto> list=itemModel.allItems();
+            List<ItemDto> list= itemDao.allItems();
         for(ItemDto dto:list){
             JFXButton btn=new JFXButton("Delete");
             ItemTableModel itm=new ItemTableModel(
@@ -79,7 +80,7 @@ public class ItemFormController {
                     btn);
             itemList.add(itm);
             btn.setOnAction(ActionEvent->{
-                itemModel.deleteItem(itm.getCode());
+                itemDao.deleteItem(itm.getCode());
             });
         }
         itemTable.setItems(itemList);
@@ -97,7 +98,7 @@ public class ItemFormController {
                 Integer.parseInt(qtyOnHandField.getText()));
 
 
-        boolean i= itemModel.saveItem(item);
+        boolean i= itemDao.saveItem(item);
         if(i==true) {
             new Alert(Alert.AlertType.INFORMATION, "Succefully Saved").show();
             loadItemTable();
@@ -115,7 +116,7 @@ public class ItemFormController {
                 Double.parseDouble(priceField.getText()),
                 Integer.parseInt(qtyOnHandField.getText()));
 
-        boolean i =itemModel.updateItem(item) ;
+        boolean i = itemDao.updateItem(item) ;
         if(i==true) {
             new Alert(Alert.AlertType.INFORMATION, "Succefully Updated").show();
 

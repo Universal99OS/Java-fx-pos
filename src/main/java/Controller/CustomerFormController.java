@@ -1,5 +1,7 @@
 package Controller;
 
+import bo.custom.CustomerBo;
+import bo.custom.impl.CustomerBoImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dto.CustomerDto;
@@ -16,8 +18,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import dao.CustomerModel;
-import dao.CustomerModelImpl;
+import dao.custom.CustomerDao;
+import dao.custom.impl.CustomerDaoImpl;
 
 import java.io.IOException;
 import java.sql.*;
@@ -56,7 +58,7 @@ public class CustomerFormController {
     @FXML
     private TableColumn collOption;
 
-    private CustomerModel customerModel=new CustomerModelImpl();
+    private CustomerBo<CustomerDto> customerBo=new CustomerBoImpl();
 
     public void initialize(){
 
@@ -88,7 +90,7 @@ public class CustomerFormController {
 
 
         try {
-            List<CustomerDto> list=customerModel.allCustomers();
+            List<CustomerDto> list= customerBo.allCustomers();
             for(CustomerDto c:list) {
                 JFXButton btn = new JFXButton("Delete");
                 CustomerTableModel ctm=new CustomerTableModel(
@@ -102,7 +104,7 @@ public class CustomerFormController {
 
                 btn.setOnAction(actionEvent -> {
                             try {
-                                boolean b = customerModel.deleteCustomer(ctm.getId());
+                                boolean b = customerBo.deleteCustomer(ctm.getId());
                                 if (b==true) {
                                     new Alert(Alert.AlertType.INFORMATION, "Item Deleted").show();
                                     loadCustomerTable();
@@ -159,7 +161,7 @@ public class CustomerFormController {
 
         boolean i = false;
         try {
-            i = customerModel.saveCustomer(c);
+            i = customerBo.saveCustomer(c);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -191,7 +193,7 @@ public class CustomerFormController {
 
         boolean b = false;
         try {
-            b = customerModel.updateCustomer(dto);
+            b = customerBo.updateCustomer(dto);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

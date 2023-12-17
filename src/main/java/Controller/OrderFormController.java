@@ -4,6 +4,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import dao.custom.ItemDaoImpl;
+import dao.custom.OrderDetailsDaoImpl;
+import dao.custom.OrderViewDaoImpl;
 import dto.OrderDetailsDto;
 import dto.tablemodel.OrderDetailsViewTm;
 import dto.tablemodel.OrderViewTm;
@@ -12,12 +15,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import dao.ItemModel;
-import dao.OrderDetailsModel;
-import dao.OrderViewModel;
-import dao.ItemModelImpl;
-import dao.OrderDetailsModelImpl;
-import dao.OrderViewModelImpl;
+import dao.custom.ItemDao;
+import dao.custom.OrderDetailsDao;
+import dao.custom.OrderViewDao;
+import dao.custom.impl.ItemDaoImpl;
+import dao.custom.impl.OrderDetailsDaoImpl;
+import dao.custom.impl.OrderViewDaoImpl;
 
 import java.util.ArrayList;
 
@@ -37,10 +40,10 @@ public class OrderFormController {
     public TreeTableColumn colAmountItemId;
     public TreeTableColumn colOptionItemId;
 
-    OrderViewModel orderViewModel=new OrderViewModelImpl();
-    OrderDetailsModel orderDetailsModel=new OrderDetailsModelImpl();
+    OrderViewDao orderViewDao =new OrderViewDaoImpl();
+    OrderDetailsDao orderDetailsDao =new OrderDetailsDaoImpl();
 
-    ItemModel itemModel=new ItemModelImpl();
+    ItemDao itemDao =new ItemDaoImpl();
 
     public void initialize(){
         colOrderId.setCellValueFactory(new TreeItemPropertyValueFactory<>("orderId"));
@@ -71,14 +74,14 @@ public class OrderFormController {
     }
 
     private void loadOrderDetailsViewTable(String orderId) {
-        ArrayList<OrderDetailsDto> detailsDtos=orderDetailsModel.getAll(orderId);
+        ArrayList<OrderDetailsDto> detailsDtos= orderDetailsDao.getAll(orderId);
         ObservableList<OrderDetailsViewTm> detailsViewTms=FXCollections.observableArrayList();
 
         for (OrderDetailsDto orderD: detailsDtos) {
             JFXButton btn=new JFXButton("Delete");
             OrderDetailsViewTm detailsViewTm=new OrderDetailsViewTm(
                     orderD.getItemCode(),
-                    itemModel.getItemDes(orderD.getItemCode()),
+                    itemDao.getItemDes(orderD.getItemCode()),
                     orderD.getPrice(),
                     orderD.getQty(),
                     (orderD.getPrice()*orderD.getQty()),
@@ -87,7 +90,7 @@ public class OrderFormController {
             );
 
             btn.setOnAction(event ->{
-                orderDetailsModel.isDelete(orderD.getOrderId(),orderD.getItemCode());
+                orderDetailsDao.isDelete(orderD.getOrderId(),orderD.getItemCode());
                 loadOrderDetailsViewTable(orderId);
             });
             detailsViewTms.add(detailsViewTm);
@@ -100,7 +103,7 @@ public class OrderFormController {
     }
 
     public void loadOrderViewTable() {
-        ObservableList<OrderViewTm> tmList= orderViewModel.allOrderViews(this);
+        ObservableList<OrderViewTm> tmList= orderViewDao.allOrderViews(this);
 
         TreeItem<OrderViewTm> treeItem=new RecursiveTreeItem<>(tmList, RecursiveTreeObject::getChildren);
         orderTableId.setRoot(treeItem);

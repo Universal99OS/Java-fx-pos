@@ -1,10 +1,10 @@
-package dao;
+package dao.custom;
 
 import dto.ItemDto;
 
 import java.util.List;
 
-public interface ItemModel {
+public interface ItemDao {
     boolean saveItem(ItemDto dto);
     boolean updateItem(ItemDto dto);
 

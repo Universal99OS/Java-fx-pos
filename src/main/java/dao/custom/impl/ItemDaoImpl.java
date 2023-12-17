@@ -1,5 +1,6 @@
-package dao;
+package dao.custom.impl;
 
+import dao.custom.ItemDao;
 import db.DbConnector;
 import dto.ItemDto;
 
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemModelImpl implements ItemModel {
+public class ItemDaoImpl implements ItemDao {
     @Override
     public boolean saveItem(ItemDto dto) {
         String sql="INSERT INTO item VALUES(?,?,?,?)";
