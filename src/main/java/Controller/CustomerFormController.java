@@ -58,7 +58,7 @@ public class CustomerFormController {
     @FXML
     private TableColumn collOption;
 
-    private CustomerBo<CustomerDto> customerBo=new CustomerBoImpl();
+    private CustomerBo customerBo=new CustomerBoImpl();
 
     public void initialize(){
 
