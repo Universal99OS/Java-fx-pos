@@ -1,16 +1,16 @@
 package dao.custom;
 
+import Entity.Orders;
+import dao.CrudDao;
+import dao.SuperDao;
 import dto.OrderdDto;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface OrderDao {
-    boolean saveOrder(OrderdDto dto) throws SQLException, ClassNotFoundException;
-    OrderdDto lastOrder() throws SQLException, ClassNotFoundException;
+public interface OrderDao extends CrudDao<Orders> {
 
-    ArrayList<OrderdDto> allOrders();
+    Orders lastOrder() throws SQLException, ClassNotFoundException;
 
-    boolean isDelte(String id);
 
 }

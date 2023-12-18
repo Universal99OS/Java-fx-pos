@@ -3,6 +3,7 @@ package bo;
 import bo.custom.CustomerBo;
 import bo.custom.impl.CustomerBoImpl;
 import bo.custom.impl.ItemBoImpl;
+import bo.custom.impl.OrderBoImpl;
 import dao.util.BoType;
 
 public class BoFactory {
@@ -18,6 +19,7 @@ public class BoFactory {
         switch (type){
             case CUSTOMER:return (T) new CustomerBoImpl();
             case ITEM:return (T) new ItemBoImpl();
+            case ORDERS:return (T) new OrderBoImpl();
         }
         return null;
     }

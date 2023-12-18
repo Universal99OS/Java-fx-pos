@@ -1,8 +1,9 @@
 package dao.custom.impl;
 
+import Entity.Orders;
 import dao.custom.OrderDetailsDao;
 import dao.custom.OrderDao;
-import dao.custom.OrderDetailsDaoImpl;
+import dao.util.CrudUtil;
 import db.DbConnector;
 import dto.OrderdDto;
 
@@ -11,99 +12,56 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class OrderDaoImpl implements OrderDao {
-
-    OrderDetailsDao orderDetailsDao =new OrderDetailsDaoImpl();
-
-    @Override
-    public boolean saveOrder(OrderdDto dto) throws SQLException {
-        Connection connection =null;
-        try {
-            connection = DbConnector.getInstance().getConnection();
-            connection.setAutoCommit(false);
-
-
-            String sql = "INSERT INTO orders VALUES(?,?,?)";
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm.setString(1, dto.getOrderId());
-            pstm.setString(2, dto.getDate());
-            pstm.setString(3, dto.getCustomerId());
-
-            if (pstm.executeUpdate() > 0) {
-                boolean isDetailsSaved = orderDetailsDao.saveOrderDtails(dto.getList());
-                if (isDetailsSaved) {
-                    connection.commit();
-                    return true;
-                }
-            }
-        }catch (SQLException | ClassNotFoundException ex){
-            connection.rollback();
-            ex.printStackTrace();
-        }finally {
-            connection.setAutoCommit(true);
-        }
-        return false;
-
-    }
+public class OrderDaoImpl implements OrderDao{
 
     @Override
-    public OrderdDto lastOrder() throws SQLException, ClassNotFoundException {
+    public Orders lastOrder() throws SQLException, ClassNotFoundException {
         String sql="SELECT * FROM orders ORDER BY id DESC LIMIT 1";
-        PreparedStatement pstm =DbConnector.getInstance().getConnection().prepareStatement(sql);
-        ResultSet resultSet = pstm.executeQuery();
+        ResultSet resultSet=CrudUtil.execute(sql);
         if(resultSet.next()){
-            return new OrderdDto(
+            return new Orders(
                     resultSet.getString(1),
                     resultSet.getString(2),
-                    resultSet.getString(3),
-                    null
+                    resultSet.getString(3)
             );
         }
         return null;
     }
 
     @Override
-    public ArrayList<OrderdDto> allOrders() {
-        ArrayList<OrderdDto> orderList=new ArrayList<>();
+    public boolean save(Orders entity) throws SQLException, ClassNotFoundException {
+        String sql = "INSERT INTO orders VALUES(?,?,?)";
+        return CrudUtil.execute(sql,entity.getId(),entity.getDate(),entity.getCustomerId());
+    }
 
-        String sql="SELECT * FROM orders";
-        try {
-            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
-            ResultSet resultSet = pstm.executeQuery();
-            while (resultSet.next()){
-                orderList.add(new OrderdDto(
-                        resultSet.getString(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        null
-                ));
-            }
-            return orderList;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    @Override
+    public boolean update(Orders entity) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String value) throws SQLException, ClassNotFoundException {
+        String sql="DELETE FROM orders WHERE id=?";
+        return CrudUtil.execute(sql,value);
 
     }
 
     @Override
-    public boolean isDelte(String id) {
-        String sql="DELETE FROM orders WHERE id=?";
-        try {
-            PreparedStatement pstm = DbConnector.getInstance().getConnection().prepareStatement(sql);
-            pstm.setString(1,id);
-            return pstm.executeUpdate()>0;
+    public List<Orders> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<Orders> orderEntities=new ArrayList<>();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        String sql="SELECT * FROM orders";
+        ResultSet resultSet=CrudUtil.execute(sql);
+        while (resultSet.next()){
+            orderEntities.add(new Orders(
+               resultSet.getString(1),
+               resultSet.getString(2),
+               resultSet.getString(3)
+            ));
         }
-        return false;
+
+        return orderEntities;
     }
-
-
 }
