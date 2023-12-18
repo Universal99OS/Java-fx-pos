@@ -1,17 +1,14 @@
 package dao.custom;
 
+import Entity.Item;
+import dao.CrudDao;
 import dto.ItemDto;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public interface ItemDao {
-    boolean saveItem(ItemDto dto);
-    boolean updateItem(ItemDto dto);
+public interface ItemDao extends CrudDao<Item> {
 
-    boolean deleteItem(String code);
-    ItemDto getItem(String code);
+    Item getItem(String code) throws SQLException, ClassNotFoundException;
 
-    List allItems();
-
-    String getItemDes(String code);
 }

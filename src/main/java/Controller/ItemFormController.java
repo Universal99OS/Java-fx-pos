@@ -1,8 +1,10 @@
 package Controller;
 
+import bo.BoFactory;
+import bo.custom.ItemBo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import dao.custom.ItemDaoImpl;
+import dao.util.BoType;
 import dto.ItemDto;
 import dto.tablemodel.ItemTableModel;
 import javafx.collections.FXCollections;
@@ -20,6 +22,7 @@ import dao.custom.ItemDao;
 import dao.custom.impl.ItemDaoImpl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -37,7 +40,7 @@ public class ItemFormController {
     public AnchorPane itemPane;
     public JFXTextField searchText;
 
-    private ItemDao itemDao =new ItemDaoImpl();
+    ItemBo itemBo=BoFactory.getInstance().getBo(BoType.ITEM);
 
     public void initialize(){
         collItemId.setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -69,7 +72,7 @@ public class ItemFormController {
 
 
         try{
-            List<ItemDto> list= itemDao.allItems();
+            List<ItemDto> list= itemBo.getAllItems();
         for(ItemDto dto:list){
             JFXButton btn=new JFXButton("Delete");
             ItemTableModel itm=new ItemTableModel(
@@ -80,7 +83,13 @@ public class ItemFormController {
                     btn);
             itemList.add(itm);
             btn.setOnAction(ActionEvent->{
-                itemDao.deleteItem(itm.getCode());
+                try {
+                    itemBo.deleteItem(itm.getCode());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             });
         }
         itemTable.setItems(itemList);
@@ -97,12 +106,18 @@ public class ItemFormController {
                 Double.parseDouble(priceField.getText()),
                 Integer.parseInt(qtyOnHandField.getText()));
 
+        try {
+            boolean i = itemBo.saveItem(item);
+            if(i) {
+                new Alert(Alert.AlertType.INFORMATION, "Succefully Saved").show();
+                loadItemTable();
+            } else new Alert(Alert.AlertType.ERROR,"Not Saved").show();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        boolean i= itemDao.saveItem(item);
-        if(i==true) {
-            new Alert(Alert.AlertType.INFORMATION, "Succefully Saved").show();
-            loadItemTable();
-        } else new Alert(Alert.AlertType.ERROR,"Not Saved").show();
     }
 
     public void updateButoonOnAction(ActionEvent actionEvent) {
@@ -116,11 +131,19 @@ public class ItemFormController {
                 Double.parseDouble(priceField.getText()),
                 Integer.parseInt(qtyOnHandField.getText()));
 
-        boolean i = itemDao.updateItem(item) ;
-        if(i==true) {
-            new Alert(Alert.AlertType.INFORMATION, "Succefully Updated").show();
 
-        } else new Alert(Alert.AlertType.ERROR,"Not Saved").show();
+        try {
+            boolean i = itemBo.updateItem(item);
+            if(i) {
+                new Alert(Alert.AlertType.INFORMATION, "Succefully Updated").show();
+
+            } else new Alert(Alert.AlertType.ERROR,"Not Saved").show();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void reloadButtonOnAction(ActionEvent actionEvent) {
