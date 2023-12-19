@@ -4,6 +4,7 @@ import Controller.OrderFormController;
 import bo.SuperBo;
 import dto.OrderDetailsDto;
 import dto.OrderdDto;
+import dto.tablemodel.OrderDetailsViewTm;
 import dto.tablemodel.OrderViewTm;
 
 import java.sql.SQLException;
@@ -19,4 +20,6 @@ public interface OrderBo extends SuperBo {
     List<OrderViewTm> getAllOrderView(OrderFormController ofc) throws SQLException, ClassNotFoundException;
 
     double getAmount(String orderId);
+
+    List<OrderDetailsViewTm> getAllOrderDetails(String orderId);
 }

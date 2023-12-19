@@ -3,18 +3,23 @@ package bo.custom.impl;
 import Controller.OrderFormController;
 import Entity.OrderDetail;
 import Entity.Orders;
+import bo.BoFactory;
+import bo.custom.ItemBo;
 import bo.custom.OrderBo;
 import com.jfoenix.controls.JFXButton;
 import dao.DaoFactory;
 import dao.custom.CustomerDao;
 import dao.custom.OrderDao;
 import dao.custom.OrderDetailsDao;
+import dao.util.BoType;
 import dao.util.DaoType;
 import dto.OrderDetailsDto;
 import dto.OrderdDto;
+import dto.tablemodel.OrderDetailsViewTm;
 import dto.tablemodel.OrderViewTm;
 import javafx.scene.control.Alert;
 
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +29,8 @@ public class OrderBoImpl implements OrderBo {
     OrderDetailsDao orderDetailsDao=DaoFactory.getInstance().getDao(DaoType.ORDER_DETAIL);
 
     CustomerDao customerDao=DaoFactory.getInstance().getDao(DaoType.CUSTOMER);
+
+    ItemBo itemBo= BoFactory.getInstance().getBo(BoType.ITEM);
 
 
     @Override
@@ -139,6 +146,50 @@ public class OrderBoImpl implements OrderBo {
             e.printStackTrace();
         }
         return amount;
+    }
+
+    @Override
+    public List<OrderDetailsViewTm> getAllOrderDetails(String orderId) {
+        try {
+            List<OrderDetail> orderDetails=orderDetailsDao.getOrderDetails(orderId);
+            List<OrderDetailsViewTm> list=new ArrayList<>();
+
+            for (OrderDetail order:orderDetails) {
+                JFXButton button=new JFXButton("Delete");
+                list.add(new OrderDetailsViewTm(
+                       order.getItemCode(),
+                       itemBo.getDescription(order.getItemCode()),
+                       order.getUnitPrice(),
+                       order.getQty(),
+                        (order.getUnitPrice()*order.getQty()),
+                        button
+                ));
+
+                button.setOnAction(actionEvent -> {
+                    try {
+                        boolean delete = orderDetailsDao.isDelete(order.getOrderId(), order.getItemCode());
+                        if(delete){
+                            new Alert(Alert.AlertType.INFORMATION,"Succefully Deleted").show();
+                        }else{
+                            new Alert(Alert.AlertType.ERROR,"Something Went Wrong").show();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+
+                });
+            }
+
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

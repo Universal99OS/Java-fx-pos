@@ -55,54 +55,37 @@ public class OrderFormController {
         colAmountId.setCellValueFactory(new TreeItemPropertyValueFactory<>("amount"));
         colOptionId.setCellValueFactory(new TreeItemPropertyValueFactory<>("btn"));
 
-//        colItemId.setCellValueFactory(new TreeItemPropertyValueFactory<>("itemId"));
-//        colDesId.setCellValueFactory(new TreeItemPropertyValueFactory<>("description"));
-//        colUnitPriceId.setCellValueFactory(new TreeItemPropertyValueFactory<>("unitPrice"));
-//        colQtyId.setCellValueFactory(new TreeItemPropertyValueFactory<>("qty"));
-//        colAmountItemId.setCellValueFactory(new TreeItemPropertyValueFactory<>("amount"));
-//        colOptionItemId.setCellValueFactory(new TreeItemPropertyValueFactory<>("btn"));
+        colItemId.setCellValueFactory(new TreeItemPropertyValueFactory<>("itemId"));
+        colDesId.setCellValueFactory(new TreeItemPropertyValueFactory<>("description"));
+        colUnitPriceId.setCellValueFactory(new TreeItemPropertyValueFactory<>("unitPrice"));
+        colQtyId.setCellValueFactory(new TreeItemPropertyValueFactory<>("qty"));
+        colAmountItemId.setCellValueFactory(new TreeItemPropertyValueFactory<>("amount"));
+        colOptionItemId.setCellValueFactory(new TreeItemPropertyValueFactory<>("btn"));
 
         loadOrderViewTable();
-//        orderTableId.setOnMouseClicked(event ->{
-//            TreeItem<OrderViewTm> selectedTreeItem=orderTableId.getSelectionModel().getSelectedItem();
-//            if(selectedTreeItem != null){
-//                OrderViewTm orderViewTm=selectedTreeItem.getValue();
-//                loadOrderDetailsViewTable(orderViewTm.getOrderId());
-//
-//            }
-//        });
+        orderTableId.setOnMouseClicked(event ->{
+            TreeItem<OrderViewTm> selectedTreeItem=orderTableId.getSelectionModel().getSelectedItem();
+            if(selectedTreeItem != null){
+                OrderViewTm orderViewTm=selectedTreeItem.getValue();
+                loadOrderDetailsViewTable(orderViewTm.getOrderId());
+            }
+        });
 
 
     }
 
-//    private void loadOrderDetailsViewTable(String orderId) {
-//        ArrayList<OrderDetailsDto> detailsDtos= orderDetailsDao.getAll(orderId);
-//        ObservableList<OrderDetailsViewTm> detailsViewTms=FXCollections.observableArrayList();
-//
-//        for (OrderDetailsDto orderD: detailsDtos) {
-//            JFXButton btn=new JFXButton("Delete");
-//            OrderDetailsViewTm detailsViewTm=new OrderDetailsViewTm(
-//                    orderD.getItemCode(),
-//                    itemDao.getItemDes(orderD.getItemCode()),
-//                    orderD.getPrice(),
-//                    orderD.getQty(),
-//                    (orderD.getPrice()*orderD.getQty()),
-//                    btn
-//
-//            );
-//
-//            btn.setOnAction(event ->{
-//                orderDetailsDao.isDelete(orderD.getOrderId(),orderD.getItemCode());
-//                loadOrderDetailsViewTable(orderId);
-//            });
-//            detailsViewTms.add(detailsViewTm);
-//
-//        }
-//
-//        TreeItem<OrderDetailsViewTm> treeItem=new RecursiveTreeItem<>(detailsViewTms,RecursiveTreeObject::getChildren);
-//        orderDetailsTableId.setRoot(treeItem);
-//        orderDetailsTableId.setShowRoot(false);
-//    }
+    private void loadOrderDetailsViewTable(String orderId) {
+        List<OrderDetailsViewTm> detailsView=orderBo.getAllOrderDetails(orderId);
+        ObservableList<OrderDetailsViewTm> detailsViewTms=FXCollections.observableArrayList();
+
+        for (OrderDetailsViewTm orderView:detailsView) {
+            detailsViewTms.add(orderView);
+        }
+
+        TreeItem<OrderDetailsViewTm> treeItem=new RecursiveTreeItem<>(detailsViewTms,RecursiveTreeObject::getChildren);
+        orderDetailsTableId.setRoot(treeItem);
+        orderDetailsTableId.setShowRoot(false);
+    }
 
     public void loadOrderViewTable() {
 
