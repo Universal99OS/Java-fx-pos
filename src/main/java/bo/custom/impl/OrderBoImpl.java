@@ -126,14 +126,11 @@ public class OrderBoImpl implements OrderBo {
 
     @Override
     public double getAmount(String orderId) {
-        System.out.println(1);
         double amount = 0.0;
         try {
-            System.out.println(2);
             List<OrderDetail> orderDetails = orderDetailsDao.getOrderDetails(orderId);
             for (OrderDetail orderDetail : orderDetails) {
                 amount+=(orderDetail.getQty()) * (orderDetail.getUnitPrice());
-                System.out.println(3);
             }
             return amount;
         } catch (SQLException e) {
