@@ -70,7 +70,7 @@ public class DashboardFormController {
         Stage stage = (Stage) pane.getScene().getWindow();
 
         try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../View/Order.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/View/Order.fxml"))));
             stage.setTitle("All Orders");
             stage.show();
         } catch (IOException e) {

@@ -27,7 +27,7 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
     @Override
     public List<OrderDetail> getOrderDetails(String orderId) throws SQLException, ClassNotFoundException {
-        String sql="Select * FROM orderdetail WHERE orderid=?";
+        String sql="select * FROM orderdetail WHERE orderid=?";
         ResultSet resultSet=CrudUtil.execute(sql,orderId);
         List<OrderDetail> entities=new ArrayList<>();
         while (resultSet.next()){

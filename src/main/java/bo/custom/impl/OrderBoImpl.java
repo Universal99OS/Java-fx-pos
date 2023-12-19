@@ -1,14 +1,19 @@
 package bo.custom.impl;
 
+import Controller.OrderFormController;
 import Entity.OrderDetail;
 import Entity.Orders;
 import bo.custom.OrderBo;
+import com.jfoenix.controls.JFXButton;
 import dao.DaoFactory;
+import dao.custom.CustomerDao;
 import dao.custom.OrderDao;
 import dao.custom.OrderDetailsDao;
 import dao.util.DaoType;
 import dto.OrderDetailsDto;
 import dto.OrderdDto;
+import dto.tablemodel.OrderViewTm;
+import javafx.scene.control.Alert;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +22,8 @@ import java.util.List;
 public class OrderBoImpl implements OrderBo {
     OrderDao orderDao= DaoFactory.getInstance().getDao(DaoType.ORDERS);
     OrderDetailsDao orderDetailsDao=DaoFactory.getInstance().getDao(DaoType.ORDER_DETAIL);
+
+    CustomerDao customerDao=DaoFactory.getInstance().getDao(DaoType.CUSTOMER);
 
 
     @Override
@@ -82,4 +89,60 @@ public class OrderBoImpl implements OrderBo {
         int num= Integer.parseInt(id.split("D")[1]);
         return String.format("D%03d",++num);
     }
+
+    @Override
+    public List<OrderViewTm> getAllOrderView(OrderFormController ofc) throws SQLException, ClassNotFoundException {
+        List<OrderViewTm> viewTmList=new ArrayList<>();
+        List<Orders> entityList=orderDao.getAll();
+        for (Orders order:entityList) {
+            JFXButton button=new JFXButton("Delete");
+            viewTmList.add(new OrderViewTm(
+                    order.getId(),
+                    order.getDate(),
+                    order.getCustomerId(),
+                    customerDao.getCustomerName(order.getCustomerId()),
+                    getAmount(order.getId()),
+                    button
+            ));
+            button.setOnAction(actionEvent -> {
+                try {
+                    boolean b = deleteOrder(order.getId());
+                    if(b){
+                        new Alert(Alert.AlertType.INFORMATION,"Succufully Deleted").show();
+                        ofc.loadOrderViewTable();
+                    }else {
+                        new Alert(Alert.AlertType.ERROR,"Something Went Wrong").show();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        return viewTmList;
+
+    }
+
+    @Override
+    public double getAmount(String orderId) {
+        System.out.println(1);
+        double amount = 0.0;
+        try {
+            System.out.println(2);
+            List<OrderDetail> orderDetails = orderDetailsDao.getOrderDetails(orderId);
+            for (OrderDetail orderDetail : orderDetails) {
+                amount+=(orderDetail.getQty()) * (orderDetail.getUnitPrice());
+                System.out.println(3);
+            }
+            return amount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return amount;
+    }
+
+
 }
