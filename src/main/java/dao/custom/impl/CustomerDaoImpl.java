@@ -3,12 +3,14 @@ package dao.custom.impl;
 import Entity.Customer;
 import dao.custom.CustomerDao;
 import dao.util.CrudUtil;
+import dao.util.HybernateUtil;
 import db.DbConnector;
 import dto.CustomerDto;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -81,12 +83,8 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public boolean delete(String value) throws SQLException, ClassNotFoundException {
-        Configuration configuration = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Customer.class);
 
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        Session session = HybernateUtil.getSession();
         Transaction transaction = session.beginTransaction();
         session.delete(session.find(Customer.class,value));
         transaction.commit();
@@ -98,21 +96,29 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public List<Customer> getAll() throws SQLException, ClassNotFoundException {
-        String sql="SELECT * FROM customer";
-        ResultSet rst = CrudUtil.execute(sql);
 
-        List<Customer> list= new ArrayList<>();
+        Session session = HybernateUtil.getSession();
+        Query query = session.createQuery("FROM Customer");
+        List<Customer> list = query.getResultList();
 
-        while (rst.next()){
-            list.add(
-                    new Customer(
-                            rst.getString(1),
-                            rst.getString(2),
-                            rst.getString(3),
-                            rst.getDouble(4)
-                    )
-            );
-        }
         return list;
+
+
+//        String sql="SELECT * FROM customer";
+//        ResultSet rst = CrudUtil.execute(sql);
+//
+//        List<Customer> list= new ArrayList<>();
+//
+//        while (rst.next()){
+//            list.add(
+//                    new Customer(
+//                            rst.getString(1),
+//                            rst.getString(2),
+//                            rst.getString(3),
+//                            rst.getDouble(4)
+//                    )
+//            );
+//        }
+//        return list;
     }
 }
