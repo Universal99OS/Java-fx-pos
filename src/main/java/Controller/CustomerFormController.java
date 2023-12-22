@@ -227,7 +227,7 @@ public class CustomerFormController {
 
     public void reportOnAction(ActionEvent actionEvent) {
         try {
-            JasperDesign design = JRXmlLoader.load("src/main/resources/Reports/Cu_re.jrxml");
+            JasperDesign design = JRXmlLoader.load("src/main/resources/Reports/Customer_report_o.jrxml");
             JasperReport jasperReport = JasperCompileManager.compileReport(design);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport,null,DbConnector.getInstance().getConnection());
             JasperViewer.viewReport(jasperPrint,false);

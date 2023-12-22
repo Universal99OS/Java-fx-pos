@@ -44,5 +44,6 @@
       <JFXButton layoutX="10.0" layoutY="399.0" onAction="#backBtnOnAction" text="Back" />
       <Text layoutX="21.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search" />
       <JFXTextField fx:id="searchText" layoutX="21.0" layoutY="119.0" />
+      <JFXButton layoutX="457.0" layoutY="399.0" onAction="#reportBtnOnAction" text="Report" />
    </children>
 </AnchorPane>

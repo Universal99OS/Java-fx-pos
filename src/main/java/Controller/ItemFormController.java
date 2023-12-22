@@ -5,6 +5,7 @@ import bo.custom.ItemBo;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import dao.util.BoType;
+import db.DbConnector;
 import dto.ItemDto;
 import dto.tablemodel.ItemTableModel;
 import javafx.collections.FXCollections;
@@ -20,6 +21,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dao.custom.ItemDao;
 import dao.custom.impl.ItemDaoImpl;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -174,4 +179,14 @@ public class ItemFormController {
     }
 
 
+    public void reportBtnOnAction(ActionEvent actionEvent) {
+        try {
+            JasperDesign design = JRXmlLoader.load("src/main/resources/Reports/Item_Report.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(design);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, DbConnector.getInstance().getConnection());
+            JasperViewer.viewReport(jasperPrint,false);
+        } catch (JRException | ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
