@@ -4,8 +4,12 @@ import Entity.Orders;
 import dao.custom.OrderDetailsDao;
 import dao.custom.OrderDao;
 import dao.util.CrudUtil;
+import dao.util.HybernateUtil;
 import db.DbConnector;
 import dto.OrderdDto;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,6 +36,13 @@ public class OrderDaoImpl implements OrderDao{
 
     @Override
     public boolean save(Orders entity) throws SQLException, ClassNotFoundException {
+//        Session session = HybernateUtil.getSession();
+//        Transaction transaction = session.beginTransaction();
+//        session.save(entity);
+//        transaction.commit();
+//        session.close();
+//        return true;
+
         String sql = "INSERT INTO orders VALUES(?,?,?)";
         return CrudUtil.execute(sql,entity.getId(),entity.getDate(),entity.getCustomerId());
     }
@@ -43,13 +54,27 @@ public class OrderDaoImpl implements OrderDao{
 
     @Override
     public boolean delete(String value) throws SQLException, ClassNotFoundException {
-        String sql="DELETE FROM orders WHERE id=?";
-        return CrudUtil.execute(sql,value);
+        Session session = HybernateUtil.getSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(session.find(Orders.class,value));
+        transaction.commit();
+        session.close();
+        return true;
+
+
+//        String sql="DELETE FROM orders WHERE id=?";
+//        return CrudUtil.execute(sql,value);
 
     }
 
     @Override
     public List<Orders> getAll() throws SQLException, ClassNotFoundException {
+//        Session session = HybernateUtil.getSession();
+//        Query query = session.createQuery("FROM Orders");
+//        List<Orders> list = query.getResultList();
+//        return list;
+
+
         ArrayList<Orders> orderEntities=new ArrayList<>();
 
         String sql="SELECT * FROM orders";

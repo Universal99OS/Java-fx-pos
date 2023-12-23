@@ -80,6 +80,7 @@ public class CustomerDaoImpl implements CustomerDao {
         Transaction transaction = session.beginTransaction();
         session.delete(session.find(Customer.class,value));
         transaction.commit();
+        session.close();
         return true;
 
 //        String sql="DELETE FROM customer WHERE id=?";
