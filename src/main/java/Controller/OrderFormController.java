@@ -13,6 +13,9 @@ import dto.tablemodel.OrderDetailsViewTm;
 import dto.tablemodel.OrderViewTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -21,8 +24,10 @@ import dao.custom.ItemDao;
 import dao.custom.OrderDetailsDao;
 import dao.custom.impl.ItemDaoImpl;
 import dao.custom.impl.OrderDetailsDaoImpl;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +114,13 @@ public class OrderFormController {
     }
 
 
-
-
+    public void backBtnOnAction(ActionEvent actionEvent) {
+        Stage stage=(Stage)orderTableId.getScene().getWindow();
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../View/DashboardForm.fxml"))));
+            stage.show();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
